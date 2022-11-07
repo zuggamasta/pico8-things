@@ -117,7 +117,7 @@ function _draw()
 
 end
 
---draw world
+-- mode7 inspired rendering code from @fsouchu
 function drawmapnew(cx,cy,cz,angle)
 	
 	local a= angle
