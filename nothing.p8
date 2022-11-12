@@ -57,7 +57,7 @@ function menudraw()
 	drawmapnew(1,1,(time()*2)%4,0)
 
 	draw_nothing(lx,ly)
-	print("press start",64-20,85)
+	print_fat("press start",64-20,85,7)
     
 end
 
@@ -67,9 +67,16 @@ function draw_rect(cx,cy,w,h,c)
 		cy-h/2,
 		cx+w/2,
 		cy+h/2
-
-
 	rectfill(x1,y1,x2,y2, c)
+
+end
+
+function print_fat(text,x,y,color,colorbg)
+	print(text,x-1,y,colorbg)
+	print(text,x+1,y,colorbg)
+	print(text,x,y-1,colorbg)
+	print(text,x,y+1,colorbg)
+	print(text,x,y,color)
 
 end
 
