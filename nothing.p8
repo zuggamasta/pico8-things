@@ -68,6 +68,9 @@ function menudraw()
 	circfill(moon_x,moon_y,12,13)
 	circfill(moon_x-3,moon_y,12-2,1)
 
+	-- print("MADE FOR agbic22",32,8,7)
+	print("COVER ART BY jasper oprel",14,120,7)
+
 
 	draw_nothing(logo_x,logo_y)
 	print_fat("press start",64-20,85,7)
