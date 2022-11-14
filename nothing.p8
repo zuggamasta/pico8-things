@@ -62,13 +62,15 @@ end
 
 function menudraw()
 	cls(1)
-
+	-- draw menu background
 	drawmapnew(1,1,(time()*2)%4,0)
+
+	-- draw menu moon
 	local moon_x, moon_y = 100,21
 	circfill(moon_x,moon_y,12,13)
 	circfill(moon_x-3,moon_y,12-2,1)
 
-	-- print("MADE FOR agbic22",32,8,7)
+	-- print("COVER ART BY jasper oprel",32,8,7)
 	print("COVER ART BY jasper oprel",14,120,7)
 
 
@@ -241,18 +243,41 @@ function gamedraw()
 	end
 
 	
-	myang = -0.02
-
-	draw_horizont(current_lvl)
 	
+	draw_horizont(current_lvl)
+	myang = -0.02
 	drawmapnew( dx/20,1,(time()*2)%4,myang)
 
 	--draw_sprite(32,1,(time()*2),myang)
 	pal(9,9)
 	draw_player()
 	
-	print(current_lvl,1,1,5)
+	draw_ui(n,current_lvl)	
+
 end
+
+function draw_ui(pnts,lvl)
+	
+	--rectfill(0,0,128,11,5)
+	--rect(0,0,127,11,6)
+
+	-- center score2
+	local x,y = 64,3
+	if(pnts >= 100) then
+		print_fat(pnts, x-6, y+1, 10,1 )
+		print_fat(pnts, x-6, y, 10,9 )
+	elseif(pnts >= 10) then
+		print_fat(pnts, x-2, y+1, 10,1 )
+
+		print_fat(pnts, x-2, y, 10,9 )
+	else 
+		print_fat(pnts, x-0, y+1, 10,1 )
+
+		print_fat(pnts, x-0, y, 10,9 )
+
+	end
+end
+
 
 function draw_horizont(level)
 	if(level  == 0 ) then
