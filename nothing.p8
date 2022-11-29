@@ -5,6 +5,12 @@ __lua__
 n = 0
 current_lvl = 0
 
+-- qte variales
+qte_time = 0
+qte_length = 500
+qte = false
+qte_s = 1
+
 -- player variables
 px = 64
 py = 64
@@ -43,6 +49,7 @@ function _init()
 	_draw = menudraw	
 
 	music(0)
+	qte = true
 end
 
 
@@ -137,6 +144,10 @@ function gameupdate()
 		end
 	end
 
+	if(btnp(4)) then
+		qte = true
+	end
+
 	if(score>100) then
 		current_lvl = 1
 	end
@@ -149,7 +160,7 @@ function gameupdate()
 	if(score>400) then
 		current_lvl = 4
 	end
-
+	qte_update()
 end
 
 function scoreupdate(value)
@@ -226,6 +237,17 @@ function playerUpdate()
 
 end
 
+function qte_update()
+	if(qte) then
+		qte_time += time()
+		qte_s = qte_time/qte_length
+	end
+	if(qte_time>qte_length)then
+		qte = false
+		qte_time = 0
+	end
+end
+
 
 
 function gamedraw()
@@ -282,6 +304,27 @@ function gamedraw()
 	
 	draw_ui(score,current_lvl)	
 
+	if(qte) then
+		draw_qte(64,64,16,11)
+	end
+
+end
+
+function draw_qte(x,y,r,c)
+	local qte_x, qte_y, qte_r, qte_c = x,y,r*qte_s,c
+	circfill(qte_x,qte_y,qte_r+1,3)
+
+	circfill(qte_x,qte_y,qte_r,qte_c)
+
+	line(qte_x-qte_r/2,qte_y-qte_r/2,qte_x+qte_r/2,qte_y+qte_r/2,7)
+	line(qte_x+qte_r/2,qte_y-qte_r/2,qte_x-qte_r/2,qte_y+qte_r/2,7)
+
+	line(1+qte_x-qte_r/2,qte_y-qte_r/2,1+qte_x+qte_r/2,qte_y+qte_r/2,7)
+	line(1+qte_x+qte_r/2,qte_y-qte_r/2,1+qte_x-qte_r/2,qte_y+qte_r/2,7)
+
+
+
+	
 end
 
 function draw_ui(pnts,lvl)
@@ -304,6 +347,7 @@ function draw_ui(pnts,lvl)
 		print_fat(pnts, x-0, y, 10,9 )
 
 	end
+
 end
 
 
