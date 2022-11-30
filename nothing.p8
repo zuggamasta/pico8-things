@@ -7,7 +7,7 @@ current_lvl = 0
 
 -- qte variales
 qte_time = 0
-qte_length = 500
+qte_length = 5
 qte = false
 qte_s = 1
 
@@ -45,15 +45,14 @@ function _init()
 	jump_legnth = jump_length_init
 
 	-- set game state to menu
-	_update = menuupdate
+	_update60 = menuupdate
 	_draw = menudraw	
 
 	music(0)
-	qte = true
 end
 
 
-function _update() end
+function _update60() end
 function _draw() end
 
 
@@ -65,7 +64,7 @@ function menuupdate()
 	-- change to game on button press
 	if(btn(4) or btn(5)) then
 		
-		_update = gameupdate
+		_update60 = gameupdate
 		_draw = gamedraw
 	end
 
@@ -239,9 +238,10 @@ end
 
 function qte_update()
 	if(qte) then
-		qte_time += time()
+		qte_time += 1/30
 		qte_s = qte_time/qte_length
 	end
+	if(qte_time <= 0.2 and qte_time > 0) then sfx(4) end
 	if(qte_time>qte_length)then
 		qte = false
 		qte_time = 0
@@ -312,16 +312,31 @@ end
 
 function draw_qte(x,y,r,c)
 	local qte_x, qte_y, qte_r, qte_c = x,y,r*qte_s,c
+
+	qte_x = qte_x + cos(time()*1)*5
+	qte_y = qte_y + sin(time()*1)*5
+
+	if(qte_time > qte_length-1) then 
+		circfill(qte_x,qte_y,2*(flr(n%2)*72-qte_r*4),7)
+	end
+
+
+	circfill(qte_x,qte_y,qte_r+2,7)
+
 	circfill(qte_x,qte_y,qte_r+1,3)
 
 	circfill(qte_x,qte_y,qte_r,qte_c)
 
+	-- draw X
 	line(qte_x-qte_r/2,qte_y-qte_r/2,qte_x+qte_r/2,qte_y+qte_r/2,7)
 	line(qte_x+qte_r/2,qte_y-qte_r/2,qte_x-qte_r/2,qte_y+qte_r/2,7)
 
 	line(1+qte_x-qte_r/2,qte_y-qte_r/2,1+qte_x+qte_r/2,qte_y+qte_r/2,7)
 	line(1+qte_x+qte_r/2,qte_y-qte_r/2,1+qte_x-qte_r/2,qte_y+qte_r/2,7)
 
+
+
+	
 
 
 	
@@ -419,36 +434,36 @@ function draw_player()
 	else
 		spr(23,px-player_width,107,2,1,true)
 	end
-
+	m = n/2
 	-- render tail
-	spr(flr((n/10)%2)+9,px+1,py+2,1,1,false)
+	spr(flr((m/10)%2)+9,px+1,py+2,1,1,false)
 
 	-- render ears
-	spr(flr((n/20)%2)+11,px-5,py-1,1,1,false)
+	spr(flr((m/20)%2)+11,px-5,py-1,1,1,false)
 
 	-- contour
-	if(flr((n/6)%2)>0) then
+	if(flr((m/6)%2)>0) then
 		--draw 2x2 sprite block
 		spr(
-			flr((n/3)%2)*2+36
+			flr((m/3)%2)*2+36
 			,px-player_width+1,py+1,2,2,false)	
 	else
 		--draw 2x2 sprite block mirrored
 		spr(
-			flr((n/3)%2)*2+36
+			flr((m/3)%2)*2+36
 			,px-player_width+1,py+1,2,2,true)
 	end
 
 	--flip sprite every x frames
-	if(flr((n/6)%2)>0) then
+	if(flr((m/6)%2)>0) then
 		--draw 2x2 sprite block
 		spr(
-			flr((n/3)%2)*2
+			flr((m/3)%2)*2
 			,px-player_width,py,2,2,false)	
 	else
 		--draw 2x2 sprite block mirrored
 		spr(
-			flr((n/3)%2)*2
+			flr((m/3)%2)*2
 			,px-player_width,py,2,2,true)
 	end
 
@@ -607,10 +622,12 @@ __map__
 0600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0006000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-cd0f00200c0220c0250e0251d022180250c025180250c022180250c025180251d0221f02513025180250b7220c02518025100251d022180250c02518025180220c025180250c0251d0251f0251a7250a7221a025
+cc0f00200c0220c0250e0251d022180250c025180250c022180250c025180251d0221f02513025180250b7220c02518025100251d022180250c02518025180220c025180250c0251d0251f0251a7250a7221a025
 010f00000f3530000000000000003a656006000f353000000f35300000000000f3533a6560000000000000000f3000f35300000000003a65600000000000f3530f3530000000000000003a65600000000000f353
 000100001703017030190301a0201c01020010280101e000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0001000021650006000060023650006000060000600006001f6000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00070000181501665016650151501665014050146401204011040136400f140116200e0200f6200e0200f1200f1200d0200d0200a6200d010086100c0100a1100b0100161008010070100261031010016102d010
 __music__
 02 00414344
+
 
