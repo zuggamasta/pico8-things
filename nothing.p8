@@ -10,6 +10,8 @@ qte_time = 0
 qte_length = 5
 qte = false
 qte_s = 1
+qte_time_to_event = 600
+qtx, qty = 64,64
 
 -- player variables
 px = 64
@@ -26,7 +28,7 @@ score = 0
 
 -- fixed values
 player_width = 8
-jump_length_init = 6
+jump_length_init = 7
 jump_legnth = 0
 ground_level = 96
 
@@ -45,8 +47,8 @@ function _init()
 	jump_legnth = jump_length_init
 
 	-- set game state to menu
-	_update60 = menuupdate
-	_draw = menudraw	
+	_update60 = menu_update
+	_draw = menu_draw	
 
 	music(0)
 end
@@ -56,7 +58,7 @@ function _update60() end
 function _draw() end
 
 
-function menuupdate()
+function menu_update()
 	-- animate logo position
 	logo_x = 64+sin(time()/4)*10
 	logo_y = 64+cos(time()/7)*10
@@ -71,7 +73,7 @@ function menuupdate()
 	
 end
 
-function menudraw()
+function menu_draw()
 	cls(1)
 	-- draw menu background
 	drawmapnew(1,1,(time()*2)%4,0)
@@ -144,7 +146,7 @@ function gameupdate()
 	end
 
 	if(btnp(4)) then
-		qte = true
+		qte_time_to_event = 0
 	end
 
 	if(score>100) then
@@ -159,7 +161,10 @@ function gameupdate()
 	if(score>400) then
 		current_lvl = 4
 	end
+
+	qte_countdown()
 	qte_update()
+
 end
 
 function scoreupdate(value)
@@ -236,6 +241,17 @@ function playerUpdate()
 
 end
 
+function qte_countdown()
+	if(qte_time_to_event <= 0)then
+		qtx = 64 - (rnd(64)-32)
+		qty = 64 - (rnd(64)-32)
+		qte = true
+		qte_time_to_event = 300 + rnd(400)
+	else
+		qte_time_to_event -= 1
+	end
+end
+
 function qte_update()
 	if(qte) then
 		qte_time += 1/30
@@ -302,10 +318,11 @@ function gamedraw()
 	pal(9,9)
 	draw_player()
 	
+	pal()
 	draw_ui(score,current_lvl)	
 
 	if(qte) then
-		draw_qte(64,64,16,11)
+		draw_qte(qtx,qty,16,11)
 	end
 
 end
@@ -629,5 +646,4 @@ cc0f00200c0220c0250e0251d022180250c025180250c022180250c025180251d0221f0251302518
 00070000181501665016650151501665014050146401204011040136400f140116200e0200f6200e0200f1200f1200d0200d0200a6200d010086100c0100a1100b0100161008010070100261031010016102d010
 __music__
 02 00414344
-
 
